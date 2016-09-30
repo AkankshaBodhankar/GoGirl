@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">GoGirl</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_splash_screen">GoGirl</string>
+    <string name="action_add_favourite">Add to Favourites</string>
+    <string name="backdrop_title">GoGirl</string>
+
+    <string name="hint_name">Full Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_sign_up">Sign Up</string>
+    <string name="err_msg_name">Enter your full name</string>
+    <string name="err_msg_email">Enter valid email address</string>
+    <string name="err_msg_password">Enter the password</string>
+
+
+    <string name="slide_1_title">Hello Food!</string>
+    <string name="slide_1_desc">The easiest way to order food from your favourite restaurant!</string>
+
+    <string name="slide_2_title">Movie Tickets</string>
+    <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
+
+    <string name="slide_3_title">Great Discounts</string>
+    <string name="slide_3_desc">Best discounts on every single service we offer!</string>
+
+    <string name="slide_4_title">World Travel</string>
+    <string name="slide_4_desc">Book tickets of any transportation and travel the world!</string>
+    <string name="next">NEXT</string>
+    <string name="start">GOT IT</string>
+    <string name="skip">SKIP</string>
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>Dashboard</item>
+        <item>Safe/Unsafe points</item>
+        <item>Contact Friends</item>
+        <item>Auto Record</item>
+        <item>Fake Siren</item>
+        <item>Contact Helpline</item>
+        <item>Safety Tips</item>
+        <item>Learn About the App</item>
+
+
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/dashboard</item>
+        <item>@drawable/pin</item>
+        <item>@drawable/contact</item>
+        <item>@drawable/record</item>
+        <item>@drawable/siren</item>
+        <item>@drawable/helpline</item>
+        <item>@drawable/tips</item>
+        <item>@drawable/learning</item>
+
+    </array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="url">defacto_url</string>
+
+    <string name="Dashboard">Dashboard</string>
+    <string name="Safe">Safe/Unsafe Points</string>
+    <string name="Contact">Contact Friends</string>
+    <string name="Record">Auto Record</string>
+    <string name="Siren">Fake Siren</string>
+    <string name="Helplines">Contact Helplines</string>
+    <string name="Tips">Safety Tips</string>
+    <string name="Learn">Learn About the App</string>
+
+
+
+
+    <string name="no_internet">Please make sure you\'re connected to Internet</string>
+
+
+</resources>
+
+
+
+

@@ -2,20 +2,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
-    <TextView
-        android:id="@+id/txtLabel"
-         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="16dp"
-        android:text="Communities View"/>
-    
-    <ImageView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtLabel"
-        android:src="@drawable/dashboard"
+
+    <Button
+        android:layout_height="200dp"
+        android:layout_width="200dp"
+        android:background="@drawable/button_round"
+        android:text="Click to Record"
+        android:textColor="#ffffff"
+        android:layout_marginTop="74dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>    
+        android:id="@+id/button2" />
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:text="STOP"
+        android:id="@+id/button"
+        android:background="@drawable/mybutton"
+        android:textColor="#ffffff"
+        android:layout_marginTop="68dp"
+        android:layout_marginLeft="50dp"
+        android:layout_below="@+id/button2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:text="PLAY"
+        android:id="@+id/button3"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/mybutton"
+        android:layout_alignTop="@+id/button"
+        android:layout_toRightOf="@+id/button"
+        android:layout_toEndOf="@+id/button" />
 
 </RelativeLayout>

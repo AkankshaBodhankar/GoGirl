@@ -14,19 +14,31 @@ import gogirl.apptite.com.apptite.*;
 public class SirenFragment extends Fragment {
 
     ToggleButton toggleButton;
+    MediaPlayer mp;
 	public SirenFragment(){}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
  
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        Log.v("Inside Siren","################################");
+        View rootView = inflater.inflate(R.layout.fragment_siren, container, false);
+        toggleButton = (ToggleButton) rootView.findViewById(R.id.toggleButton);
+        mp = MediaPlayer.create(getActivity(), R.raw.sirenpolice);
 
-        Intent i=new Intent(getActivity(),Siren.class);
-        startActivity(i);
 
-         
+        if (toggleButton.isChecked())
+            mp.start();
+        toggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!toggleButton.isChecked()) {
+                    mp.pause();
+                } else {
+                    mp.start();
+                    mp.isLooping();
+                }
+            }
+        });
         return rootView;
     }
 }

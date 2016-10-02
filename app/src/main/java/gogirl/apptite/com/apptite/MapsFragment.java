@@ -18,7 +18,7 @@ public class MapsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        Intent i=new Intent(getActivity(),Slider.class);
+        Intent i=new Intent(getActivity(), Maps.class);
         startActivity(i);
         return rootView;
     }

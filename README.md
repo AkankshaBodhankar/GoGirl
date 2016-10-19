@@ -25,12 +25,16 @@ And many more features…….
 
 ![image](https://cloud.githubusercontent.com/assets/14356938/19451071/8338a4cc-94c9-11e6-96b2-f0d3e866bede.jpg)
 
-###Few screenshots of the application
+###Few mockup screens of the application
 
-![screenshot_2016-10-17-16-19-47-034_gogirl apptite com apptite](https://cloud.githubusercontent.com/assets/14356938/19451060/78ec0d2e-94c9-11e6-8b9b-5cd1e377bd6b.png)
+![login](https://cloud.githubusercontent.com/assets/14356938/19512664/9924c350-960a-11e6-9cde-640d8e6645af.png)
 
-![screenshot_2016-10-03-01-41-07-400_gogirl apptite com apptite](https://cloud.githubusercontent.com/assets/14356938/19451061/78fabdf6-94c9-11e6-93b7-7ac9320930aa.png)
+![new mockup 4](https://cloud.githubusercontent.com/assets/14356938/19512663/99237996-960a-11e6-9a7c-62ddb0592cc9.png)
 
-![screenshot_2016-10-14-12-22-59-884_gogirl apptite com apptite](https://cloud.githubusercontent.com/assets/14356938/19451062/7901effe-94c9-11e6-9b88-e0742849a6fd.png)
+![safe and unsafe points](https://cloud.githubusercontent.com/assets/14356938/19512665/993264ba-960a-11e6-8c08-5c0f3fdd54e4.png)
 
-![screenshot_2016-10-17-16-19-34-083_gogirl apptite com apptite](https://cloud.githubusercontent.com/assets/14356938/19451063/7903b76c-94c9-11e6-9c2f-557a64bb9dc4.png)
+###Docs 
+
+ [GoGirl Docs and screenshots](https://github.com/AkankshaBodhankar/GoGirl/docs)
+
+

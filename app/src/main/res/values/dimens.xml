@@ -10,4 +10,154 @@
     <dimen name="slide_title">30dp</dimen>
     <dimen name="slide_desc">16dp</dimen>
     <dimen name="desc_padding">40dp</dimen>
+
+
+
+
+
+
+<dimen name="reporting_confidentiality_layout_height">0dp</dimen>
+<dimen name="reporting_resources_layout_height">0dp</dimen>
+<dimen name="reporting_confidentiality_textview_padding">10dp</dimen>
+<dimen name="reporting_resource_padding">10dp</dimen>
+<dimen name="homescreen_margin">10dp</dimen>
+<dimen name="textview_padding">10dp</dimen>
+<dimen name="reporting_types_padding">10dp</dimen>
+<dimen name="trustee_margin">10dp</dimen>
+<dimen name="trustee_button_height">50dp</dimen>
+<dimen name="trustee_margin_top">40dp</dimen>
+<dimen name="trustee_margin_bottom">20dp</dimen>
+<dimen name="reporting_types_width">250dp</dimen>
+<dimen name="homescreen_margin_first">50dp</dimen>
+<dimen name="contacting_post_staff_marginTop">30dp</dimen>
+<dimen name="contacting_post_staff_marginTop_15">15dp</dimen>
+<dimen name="contacting_post_staff_marginLeft">5dp</dimen>
+<dimen name="contacting_post_staff_marginRight">30dp</dimen>
+<dimen name="contacting_post_staff_spinner_marginTop">3dp</dimen>
+<dimen name="contacting_post_staff_spinner_width">110dp</dimen>
+<dimen name="contacting_post_staff_spinner_height">35dp</dimen>
+<dimen name="contacting_post_staff_view_width">2dp</dimen>
+<dimen name="faq_width">20dp</dimen>
+<dimen name="faq_padding">10dp</dimen>
+<dimen name="faq_height">20dp</dimen>
+<dimen name="circle_of_trust_width">50dp</dimen>
+<dimen name="circle_of_trust_width_25">25dp</dimen>
+<dimen name="circle_of_trust_height">50dp</dimen>
+<dimen name="circle_of_trust_image_width">80dp</dimen>
+<dimen name="circle_of_trust_image_height">80dp</dimen>
+<dimen name="circle_of_trust_marginLeft_request_button">40dp</dimen>
+<dimen name="circle_of_trust_marginLeft">70dp</dimen>
+<dimen name="circle_of_trust_marginLeft_com1">0dp</dimen>
+<dimen name="circle_of_trust_marginRight">10dp</dimen>
+<dimen name="fragment_main_marginTop">30dp</dimen>
+<dimen name="fragment_main_marginTop_20">20dp</dimen>
+<dimen name="safety_resource_marginTop_50">50dp</dimen>
+<dimen name="safety_resource_marginTop_70">70dp</dimen>
+<dimen name="safety_resource_height">80dp</dimen>
+<dimen name="layout_width">250dp</dimen>
+<dimen name="layout_height">250dp</dimen>
+<dimen name="padding_top_dp">15dp</dimen>
+<dimen name="intro_padding_16">16dp</dimen>
+<dimen name="intro_padding">32dp</dimen>
+<dimen name="intro_padding_20">20dp</dimen>
+<dimen name="intro_padding_64">64dp</dimen>
+<dimen name="intro_layout_height">0dp</dimen>
+<dimen name="padding_top">15px</dimen>
+<dimen name="margin_top">30px</dimen>
+
+<!-- Title and sub-title font sizes-->
+<dimen name="title_font">32sp</dimen>
+<dimen name="sub_title_font">28sp</dimen>
+<dimen name="menu_icon_width">200dp</dimen>
+<dimen name="text_extra_small">12sp</dimen>
+<dimen name="text_small">16sp</dimen>
+<dimen name="text_normal">20sp</dimen>
+<dimen name="text_large">28sp</dimen>
+<dimen name="safety_resource_text_size">40sp</dimen>
+
+<dimen name="app_button_side_padding">5dp</dimen>
+<dimen name="contact_pick_button_margin">8dp</dimen>
+<dimen name="contact_pick_button_width">30dp</dimen>
+<dimen name="photo_border_width">2dp</dimen>
+<dimen name="contact_pick_padding_top_bottom">5dp</dimen>
+
+
+<dimen name="button_margin_top">30dp</dimen>
+<dimen name="button_margin_right_otherstaff">5dp</dimen>
+<dimen name="button_width_poststaff">265dp</dimen>
+<dimen name="icon_size_poststaff">48dp</dimen>
+<dimen name="dialog_divider_height">2dp</dimen>
+<dimen name="dialog_icon_size">60dp</dimen>
+<dimen name="dialog_icon_marginleft">30dp</dimen>
+<dimen name="dialog_icon_marginright">15dp</dimen>
+<dimen name="reporting_dialog_text_size">25sp</dimen>
+<dimen name="circle_of_trust_dialog_text_size">20sp</dimen>
+<dimen name="header_font">32sp</dimen>
+<dimen name="view_height">2dp</dimen>
+<dimen name="view_margin">5dp</dimen>
+<dimen name="splash_screen_imgsize">240dp</dimen>
+<dimen name="splash_screen_title_size">45sp</dimen>
+
+<!--Navigation Drawer-->
+<dimen name="navbar_header_height">125dp</dimen>
+<dimen name="navbar_header_textsize">35sp</dimen>
+<dimen name="navbar_item_header_textsize">16sp</dimen>
+<dimen name="navbar_item_textsize">15sp</dimen>
+<dimen name="navbar_icon_size">48dp</dimen>
+<dimen name="navbar_listitem_padding">10dp</dimen>
+<dimen name="navbar_header_divider_height">2dp</dimen>
+<dimen name="navbar_listview_header_padding">10dp</dimen>
+<dimen name="navbar_icon_header_size">225dp</dimen>
+<!-- Default screen margins, per the Android Design guidelines. -->
+<dimen name="nav_header_vertical_spacing">16dp</dimen>
+<dimen name="nav_header_height">160dp</dimen>
+
+<dimen name="progressbar_margin_top">59dp</dimen>
+<dimen name="circle_of_trust_image_name_size">15sp</dimen>
+<dimen name="icon_size_radar">56dp</dimen>
+<dimen name="bystander_button_textsize">18sp</dimen>
+<dimen name="fragment_main_marginTop_35">35dp</dimen>
+<dimen name="bystander_margin_below">29dp</dimen>
+<dimen name="bystander_margin_bottom">72dp</dimen>
+<dimen name="bystander_margin_below_text">91dp</dimen>
+<dimen name="sub_title_font_22">22sp</dimen>
+<dimen name="dialog_height">350dp</dimen>
+<dimen name="appbar_padding_top">8dp</dimen>
+
+<!-- Default screen margins, per the Android Design guidelines. -->
+<dimen name="tab_max_width">264dp</dimen>
+<dimen name="tab_padding_bottom">16dp</dimen>
+<dimen name="tab_label">14sp</dimen>
+<dimen name="custom_tab_layout_height">72dp</dimen>
+<dimen name="viewpager">320dp</dimen>
+<dimen name="sub_title_font_safety_plan">20sp</dimen>
+<dimen name="header_font_safety_plan">28sp</dimen>
+<dimen name="navbar_icon_header_height">100dp</dimen>
+<dimen name="padding_10">10dp</dimen>
+<dimen name="hint_size">19sp</dimen>
+<dimen name="center_font">16sp</dimen>
+<dimen name="status_bar_size">24dp</dimen>
+
+    <dimen name="item_offset">10dp</dimen>
+    <dimen name="detail_backdrop_height">250dp</dimen>
+    <dimen name="backdrop_title">30dp</dimen>
+    <dimen name="backdrop_subtitle">18dp</dimen>
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_album_radius">0dp</dimen>
+    <dimen name="album_cover_height">120dp</dimen>
+    <dimen name="album_title_padding">10dp</dimen>
+    <dimen name="album_title">15dp</dimen>
+    <dimen name="songs_count_padding_bottom">5dp</dimen>
+    <dimen name="songs_count">12dp</dimen>
+    <dimen name="ic_album_overflow_width">20dp</dimen>
+    <dimen name="ic_album_overflow_height">30dp</dimen>
+    <dimen name="ic_album_overflow_margin_top">10dp</dimen>
+
+
+
+
+<dimen name="font_size_meaning">16sp</dimen>
+<dimen name="fragment_main_marginTop_30">30dp</dimen>
+<dimen name="textsize_links">18sp</dimen>
 </resources>
+

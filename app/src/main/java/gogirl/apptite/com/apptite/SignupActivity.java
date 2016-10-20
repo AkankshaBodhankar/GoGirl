@@ -1,19 +1,20 @@
 package gogirl.apptite.com.apptite;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.sendgrid.SendGrid;
 
 import gogirl.apptite.com.apptite.Connectivity.InternetConnectivity;
 
@@ -32,14 +33,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends Activity {
 
-    private Toolbar toolbar;
     String echo_data;
     private EditText inputName, inputEmail;
     private TextInputLayout inputLayoutName, inputLayoutEmail;
     private Button btnSignUp;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,25 +51,23 @@ public class SignupActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.input_email);
 
         btnSignUp = (Button) findViewById(R.id.btn_signup);
-/*
-        findViewById(R.id.btn_dashboard).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignupActivity.this,DashboardActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
-        inputName.addTextChangedListener(new MyTextWatcher(inputName));
-        inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
-
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitForm();
 
+                if(new InternetConnectivity().checkConnectivity(SignupActivity.this))
+                {
+                    if(validateName() && validateEmail())
+                        sendDataToServer(inputName,inputEmail);
+                    else
+                        inputLayoutEmail.setError(getString(R.string.err_msg_email));
 
+                }
+                else
+                {
+                    Toast.makeText(SignupActivity.this,"Cant connect to internet",Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -84,10 +81,11 @@ public class SignupActivity extends AppCompatActivity {
         {
 
             @Override
-            protected Void doInBackground(String... params) {
+            protected Void doInBackground(String... params)
+            {
                 try
                 {
-                    URL url = new URL("http://virtusa.azurewebsites.net/index.php");
+                    URL url = new URL(getString(R.string.SignUpURL));
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setReadTimeout(10000);
                     conn.setConnectTimeout(15000);
@@ -98,7 +96,6 @@ public class SignupActivity extends AppCompatActivity {
                     List<NameValuePair> param = new ArrayList<NameValuePair>();
                     param.add(new BasicNameValuePair("name", params[0]));
                     param.add(new BasicNameValuePair("email", params[1]));
-
                     OutputStream os = conn.getOutputStream();
                     BufferedWriter writer = new BufferedWriter(
                             new OutputStreamWriter(os, "UTF-8"));
@@ -121,7 +118,49 @@ public class SignupActivity extends AppCompatActivity {
 
                     Log.v("Error Code ######",echo_data);
 
+                    switch (echo_data)
+                    {
+                        case "101":
+                            new Handler(Looper.getMainLooper()).post(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    Toast.makeText(SignupActivity.this, "No DB Connection", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case "102":
+                            new Handler(Looper.getMainLooper()).post(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    Toast.makeText(SignupActivity.this, "No Parameters", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case "103":
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(SignupActivity.this,"User already exists! Please SignUp with a different address",Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
+                            break;
+                        case "104":
+                            new Handler(Looper.getMainLooper()).post(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    Toast.makeText(SignupActivity.this, "Sign Up Success...Please Login!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            startActivity(new Intent(SignupActivity.this,LoginActivity.class));
+                            break;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -149,14 +188,14 @@ public class SignupActivity extends AppCompatActivity {
 
                 return result.toString();
             }
+
+
         }
+
         Sendingdata sd = new Sendingdata();
         sd.execute(name.getText().toString(),email.getText().toString());
     }
 
-    /**
-     * Validating form
-     */
     private void submitForm() {
         if (!validateName()) {
             return;
@@ -165,23 +204,11 @@ public class SignupActivity extends AppCompatActivity {
         if (!validateEmail()) {
             return;
         }
-
-        if(new InternetConnectivity().checkConnectivity(SignupActivity.this))
-        {
-            sendDataToServer(inputName,inputEmail);
-            Toast.makeText(SignupActivity.this,"Sign up Successful!",Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            Toast.makeText(SignupActivity.this,"Cant connect to internet",Toast.LENGTH_LONG).show();
-        }
-        //Toast.makeText(getApplicationContext(), "Thank You!", Toast.LENGTH_SHORT).show();
     }
 
     private boolean validateName() {
         if (inputName.getText().toString().trim().isEmpty()) {
             inputLayoutName.setError(getString(R.string.err_msg_name));
-            requestFocus(inputName);
             return false;
         } else {
             inputLayoutName.setErrorEnabled(false);
@@ -195,7 +222,6 @@ public class SignupActivity extends AppCompatActivity {
 
         if (email.isEmpty() || !isValidEmail(email)) {
             inputLayoutEmail.setError(getString(R.string.err_msg_email));
-            requestFocus(inputEmail);
             return false;
         } else {
             inputLayoutEmail.setErrorEnabled(false);
@@ -206,37 +232,5 @@ public class SignupActivity extends AppCompatActivity {
 
     private static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
-    }
-
-    private class MyTextWatcher implements TextWatcher {
-
-        private View view;
-
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.input_name:
-                    validateName();
-                    break;
-                case R.id.input_email:
-                    validateEmail();
-                    break;
-            }
-        }
     }
 }

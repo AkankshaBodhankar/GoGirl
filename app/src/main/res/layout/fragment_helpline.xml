@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -6,8 +9,10 @@
     <Button
         android:layout_width="300dp"
         android:layout_height="50dp"
+        android:paddingLeft="20dp"
+        android:drawableLeft="@drawable/police"
         android:id="@+id/helpline1"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/mybutton"
         android:layout_marginTop="30dp"
         android:text="Police Control Room"
         android:textColor="@color/COLOR_WHITE"
@@ -17,7 +22,9 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:id="@+id/helpline2"
-        android:background="@color/colorPrimary"
+        android:paddingLeft="20dp"
+        android:drawableLeft="@drawable/whelp"
+        android:background="@drawable/mybutton"
         android:text="Women's helpline"
         android:textColor="@color/COLOR_WHITE"
         android:layout_marginTop="30dp"
@@ -27,8 +34,10 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:id="@+id/helpline3"
-        android:background="@color/colorPrimary"
-        android:text="National Commision for Women"
+        android:paddingLeft="20dp"
+        android:drawableLeft="@drawable/ncw"
+        android:background="@drawable/mybutton"
+        android:text="N  C  W"
         android:textColor="@color/COLOR_WHITE"
         android:layout_marginTop="30dp"
         android:layout_below="@+id/helpline2"
@@ -38,9 +47,11 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:id="@+id/helpline4"
-        android:background="@color/colorPrimary"
-        android:text="Anti-Stalking/Obscence calls"
+        android:background="@drawable/mybutton"
+        android:text="Anti-Stalking calls"
         android:textColor="@color/COLOR_WHITE"
+        android:paddingLeft="20dp"
+        android:drawableLeft="@drawable/cal"
         android:layout_marginTop="30dp"
         android:layout_below="@+id/helpline3"
         android:layout_centerHorizontal="true" />
@@ -49,7 +60,9 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:id="@+id/helpline5"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/mybutton"
+        android:paddingLeft="20dp"
+        android:drawableLeft="@drawable/ambulance"
         android:text="Ambulance"
         android:textColor="@color/COLOR_WHITE"
         android:layout_marginTop="30dp"
@@ -57,9 +70,11 @@
         android:layout_centerHorizontal="true" />
     <Button
         android:layout_width="300dp"
+        android:paddingLeft="20dp"
+        android:drawableLeft="@drawable/aio"
         android:layout_height="50dp"
         android:id="@+id/helpline6"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/mybutton"
         android:text="All-in-one emergency"
         android:textColor="@color/COLOR_WHITE"
         android:layout_marginTop="30dp"
@@ -68,3 +83,4 @@
 
 
 </RelativeLayout>
+</ScrollView>

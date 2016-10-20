@@ -7,5 +7,20 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="NavigateButton" parent="AppButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">@dimen/text_normal</item>
+    </style>
+    <style name="AppButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_btn_rounded_rectangle</item>
+        <item name="android:textColor">@color/primary_text_default_material_dark</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">@dimen/app_button_side_padding</item>
+        <item name="android:paddingRight">@dimen/app_button_side_padding</item>
+    </style>
 </resources>

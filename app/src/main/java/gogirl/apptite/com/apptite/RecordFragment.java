@@ -1,10 +1,16 @@
 package gogirl.apptite.com.apptite;
 
+import android.*;
+import android.Manifest;
 import android.app.Fragment;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +52,11 @@ public class RecordFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     myAudioRecorder.prepare();
+
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+
                     myAudioRecorder.start();
                 }
 

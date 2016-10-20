@@ -1,6 +1,5 @@
 package gogirl.apptite.com.apptite;
 
-
 import android.Manifest;
 import android.app.AlertDialog;
 
@@ -14,8 +13,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -32,12 +31,37 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.AsyncTask;
+
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import android.os.Handler;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import  gogirl.apptite.com.apptite.Connectivity.InternetConnectivity;
 
 public class Maps extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
@@ -45,6 +69,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
     private HashMap<Marker, MyMarker> mHashMap;
     private HashSet<MyMarker> mset = new HashSet<MyMarker>();
     private String dialogText = "";
+    boolean isDuplicate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +78,16 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        if(new InternetConnectivity().checkConnectivity(Maps.this)) {
+            mapFragment.getMapAsync(this);
+        }
+        else {
+            Toast.makeText(Maps.this,"Can't connect to internet",Toast.LENGTH_LONG).show();
+        }
 
         mHashMap = new HashMap<Marker, MyMarker>();
+        loadSet();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -69,19 +101,17 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
 
     @Override
     public void onLocationChanged(Location location) {
-        if (dialogText == "Safe Point") {
-            mset.add(new MyMarker("Safe Point", location.getLatitude(), location.getLongitude()));
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .title("Safe point")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+
+        Double lat = BigDecimal.valueOf(location.getLatitude()).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        Double lon = BigDecimal.valueOf(location.getLongitude()).setScale(3, RoundingMode.HALF_UP).doubleValue();
+
+        if (dialogText.equals("Safe Point")) {
+            MyMarker myMarker = new MyMarker("Safe Point", lat, lon);
+            addMark(myMarker);
         }
-        else if(dialogText == "Unsafe Point") {
-            mset.add(new MyMarker("Unsafe Point", location.getLatitude(), location.getLongitude()));
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .title("Unsafe point")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        else if(dialogText.equals("Unsafe Point")) {
+            MyMarker myMarker = new MyMarker("Unsafe Point", lat, lon);
+            addMark(myMarker);
         }
     }
 
@@ -94,7 +124,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
             showGPSDisabledAlertToUser();
         }
         if (lastKnownLocationGPS != null) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
                     PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
                     (this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -106,51 +136,162 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
             try {
                 lat = location.getLatitude();
                 lon = location.getLongitude();
-                CameraUpdate center=
+
+                CameraUpdate center =
                         CameraUpdateFactory.newLatLng(new LatLng(lat,
                                 lon));
-                CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
-
+                CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
                 mMap.moveCamera(center);
                 mMap.animateCamera(zoom);
-                if (dialogText == "Safe Point") {
-                    if(mset.contains(new MyMarker("Safe Point", lat, lon))){
-                        Toast.makeText(getApplicationContext(), "Already Marked", Toast.LENGTH_LONG).show();
-                    }else{
-                        mset.add(new MyMarker("Safe Point", lat, lon));
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                                .title("safe point")
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                    }
-                }
-                else if(dialogText == "Unsafe Point") {
-                    if(mset.contains(new MyMarker("Unsafe Point", lat, lon))){
-                        Toast.makeText(getApplicationContext(), "Already Marked", Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        mset.add(new MyMarker("Unsafe Point", lat, lon));
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                                .title("safe point")
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    }
 
+                if (dialogText.equals("Safe Point")) {
+                    MyMarker myMarker = new MyMarker("Safe Point", lat, lon);
+                    addMark(myMarker);
                 }
-                //Toast.makeText(getApplicationContext(), "lat" + lat + "lon" + lon, Toast.LENGTH_LONG).show();
+                else if (dialogText.equals("Unsafe Point")) {
+                    MyMarker myMarker = new MyMarker("Unsafe Point", lat, lon);
+                    addMark(myMarker);
+                }
             } catch (NullPointerException e) {
                 e.printStackTrace();
-
             }
         } else {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
                     PackageManager.PERMISSION_GRANTED && ActivityCompat.
                     checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
+    }
+    private void addMark(MyMarker myMarker){
+
+        if(myMarker.getmLabel().equals("Safe Point")){
+            sendToDatabase("Safe Point", myMarker.getmLatitude(), myMarker.getmLongitude());
+            if(!isDuplicate){
+                mset.add(myMarker);
+                MarkerOptions markerOption = new MarkerOptions().position(new LatLng(myMarker.getmLatitude(), myMarker.getmLongitude()));
+                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                Marker currentMarker = mMap.addMarker(markerOption);
+                mHashMap.put(currentMarker, myMarker);
+                mMap.setInfoWindowAdapter(new MarkerInfoWindowAdapter());
+            }
+
+        }else if(myMarker.getmLabel().equals("Unsafe Point")){
+            sendToDatabase("Unsafe Point", myMarker.getmLatitude(), myMarker.getmLongitude());
+            if(!isDuplicate){
+                mset.add(myMarker);
+                MarkerOptions markerOption = new MarkerOptions().position(new LatLng(myMarker.getmLatitude(), myMarker.getmLongitude()));
+                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                Marker currentMarker = mMap.addMarker(markerOption);
+                mHashMap.put(currentMarker, myMarker);
+                mMap.setInfoWindowAdapter(new MarkerInfoWindowAdapter());
+            }
+        }
+    }
+    private void sendToDatabase(final String label, Double latitude, Double longitude) {
+
+        class PlaceMarker extends AsyncTask<String, Void, Void> {
+
+            @Override
+            protected Void doInBackground(String... params) {
+                try {
+                    URL url = new URL("http://virtusa.azurewebsites.net/mapsdatasend.php");
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setReadTimeout(10000);
+                    conn.setConnectTimeout(15000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+
+                    List<NameValuePair> param = new ArrayList<NameValuePair>();
+
+                    param.add(new BasicNameValuePair("stat", params[0]));
+                    param.add(new BasicNameValuePair("latitude", params[1]));
+                    param.add(new BasicNameValuePair("longitude", params[2]));
+                    OutputStream os = conn.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+                    writer.write(getQuery(param));
+                    writer.flush();
+                    writer.close();
+                    os.close();
+
+                    conn.connect();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"), 8);
+                    StringBuilder sb = new StringBuilder();
+
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    Log.v("Output########",sb.toString());
+
+                    switch (sb.toString())
+                    {
+                        case "101":
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(Maps.this, "No DB connection", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case "102":
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(Maps.this, "No Parameters", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case "103":
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    isDuplicate = true;
+                                    Toast.makeText(Maps.this, "Location already marked!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case "104":
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(Maps.this,"Success!Your location marked as "+label,Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    }
+
+                } catch (Exception ex) {
+                    Log.v("Exception", ex.toString());
+                }
+                return null;
+            }
+
+            private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException {
+                StringBuilder result = new StringBuilder();
+                boolean first = true;
+
+                for (NameValuePair pair : params) {
+                    if (first)
+                        first = false;
+                    else
+                        result.append("&");
+
+                    result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
+                    result.append("=");
+                    result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
+                }
+
+                return result.toString();
+            }
+        }
+        PlaceMarker sd = new PlaceMarker();
+        sd.execute(label, latitude.toString(), longitude.toString());
     }
 
     private void showGPSDisabledAlertToUser() {
@@ -185,7 +326,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
         Log.d("Latitude", "enable");
     }
 
-
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         Log.d("Latitude", "status");
@@ -194,33 +334,30 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
-                (this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         mMap.setMyLocationEnabled(true);
-        loadSet();
-        plot(mset);
     }
 
     private void dialog() {
         final CharSequence[] items = {"Safe Point","Unsafe Point"};
         AlertDialog.Builder alt_builder = new AlertDialog.Builder(this);
-        alt_builder.setIcon(R.drawable.icon);
         alt_builder.setTitle("Mark your current location as");
         alt_builder.setSingleChoiceItems(items, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                Toast.makeText(getApplicationContext(), "Your current location marked as " + items[item], Toast.LENGTH_SHORT).show();
                 dialogText = (String) items[item];
                 getLocation();
-                dialog.dismiss();// dismiss the alertbox choosing
+                dialog.dismiss();
             }
         });
         AlertDialog alert = alt_builder.create();
         alert.show();
     }
-    public void loadSet(){
+    public void loadSet() {
+        /*
         mset.add(new MyMarker("Safe Point", Double.parseDouble("-28.5971788"), Double.parseDouble("-52.7309824")));
         mset.add(new MyMarker("Safe Point", Double.parseDouble("19.075984"), Double.parseDouble("72.877656")));
         mset.add(new MyMarker("Safe Point", Double.parseDouble("33.7266622"), Double.parseDouble("-87.1469829")));
@@ -243,12 +380,72 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
         mset.add(new MyMarker("Unsafe Point", Double.parseDouble("12.862807"), Double.parseDouble("30.217636")));
         mset.add(new MyMarker("Unsafe Point", Double.parseDouble("43.4435047"), Double.parseDouble("-3.4199249")));
         mset.add(new MyMarker("Unsafe Point", Double.parseDouble("53.904540"), Double.parseDouble("27.561524")));
+        */
+
+        class RetrieveMarker extends AsyncTask<String,Void,StringBuilder> {
+
+            @Override
+            protected StringBuilder doInBackground(String... params) {
+                StringBuilder sb = null;
+                try
+                {
+                    URL url = new URL("http://virtusa.azurewebsites.net/mapsdataretrieve.php");
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setReadTimeout(10000);
+                    conn.setConnectTimeout(15000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+
+                    conn.connect();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"), 8);
+                    sb = new StringBuilder();
+
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.v("Exception", ex.toString());
+                }
+                return sb;
+            }
+
+            @Override
+            protected void onPostExecute(StringBuilder sb) {
+
+                try {
+                    JSONObject  jsonRootObject = new JSONObject(sb.toString());
+                    JSONArray jsonArray = jsonRootObject.optJSONArray("markers");
+                    for(int i=0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        String stat = jsonObject.optString("stat");
+                        Double latitude = Double.parseDouble(jsonObject.optString("latitude"));
+                        Double longitude = Double.parseDouble(jsonObject.optString("longitude"));
+
+                        mset.add(new MyMarker(stat,latitude,longitude));
+                    }
+                    plot(mset);
+                }
+                catch (Exception ex) {
+
+                }
+
+            }
+        }
+        RetrieveMarker sd = new RetrieveMarker();
+        sd.execute();
     }
 
     private void plot(Set<MyMarker> set){
         if(set.size()>0){
             for(MyMarker myMarker: set) {
-                if (myMarker.getmLabel() == "Safe Point") {
+
+                if (myMarker.getmLabel().equals("Safe Point")) {
                     MarkerOptions markerOption = new MarkerOptions().position(new LatLng(myMarker.getmLatitude(), myMarker.getmLongitude()));
                     markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     Marker currentMarker = mMap.addMarker(markerOption);
@@ -256,7 +453,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
                     mMap.setInfoWindowAdapter(new MarkerInfoWindowAdapter());
 
                 }
-                else if(myMarker.getmLabel() == "Unsafe Point"){
+                else if(myMarker.getmLabel().equals("Unsafe Point")){
                     MarkerOptions markerOption = new MarkerOptions().position(new LatLng(myMarker.getmLatitude(), myMarker.getmLongitude()));
                     markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                     Marker currentMarker = mMap.addMarker(markerOption);

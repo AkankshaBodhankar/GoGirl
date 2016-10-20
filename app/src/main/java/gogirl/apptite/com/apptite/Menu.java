@@ -1,7 +1,6 @@
 package gogirl.apptite.com.apptite;
 
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -17,9 +16,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import gogirl.apptite.com.apptite.adapter.NavDrawerListAdapter;
+import gogirl.apptite.com.apptite.contact_friends.ContactFriendsFragment;
 import gogirl.apptite.com.apptite.model.NavDrawerItem;
 
 import java.util.ArrayList;
+
 
 public class Menu extends ActionBarActivity {
 	private DrawerLayout mDrawerLayout;
@@ -124,12 +125,21 @@ public class Menu extends ActionBarActivity {
 			return true;
 		}
 		// Handle action bar actions click
+		Fragment f=null;
 		switch (item.getItemId()) {
+
 		case R.id.action_settings:
+			f=new RecommendedFragment();
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, f).commit();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+
+
+
 	}
 
 
@@ -145,17 +155,18 @@ public class Menu extends ActionBarActivity {
 	private void displayView(int position) {
 		// update the main content by replacing fragments
 		Fragment fragment = null;
+
 		switch (position) {
 		case 0:
 			getSupportActionBar().setIcon(R.drawable.dashboard);
-            fragment = new DashboardFragment();
+            fragment = new HomeFragment();
 			break;
 		case 1:getSupportActionBar().setIcon(R.drawable.pin);
             fragment = new MapsFragment();
 			break;
 		case 2:
 			getSupportActionBar().setIcon(R.drawable.contact);
-            fragment = new ContactFragment();
+            fragment = new ContactFriendsFragment();
 			break;
 		case 3:
 			getSupportActionBar().setIcon(R.drawable.record);
@@ -169,13 +180,19 @@ public class Menu extends ActionBarActivity {
 			getSupportActionBar().setIcon(R.drawable.helpline);
             fragment = new HelplineFragment();
 			break;
-		case 7:
-				getSupportActionBar().setIcon(R.drawable.learning);
-				fragment = new LearnFragment();
-				break;
+
 		case 6:
 				getSupportActionBar().setIcon(R.drawable.tips);
 				fragment = new TipsFragment();
+				break;
+		case 7:
+				getSupportActionBar().setIcon(R.drawable.move_of_the_day);
+				fragment = new MoveFragment();
+				break;
+
+		case 8:
+				getSupportActionBar().setIcon(R.drawable.learning);
+				fragment = new LearnFragment();
 				break;
 
 

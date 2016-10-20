@@ -62,5 +62,31 @@
         <item>@color/dot_light_screen3</item>
         <item>@color/dot_light_screen4</item>
     </array>
+
+
+
+    <color name="background_app">#f98da5</color>
+    <color name="background_textview">#f98da5</color>
+    <color name="background_clicked">#FFC25C</color>
+    <color name="background_fragment_circle_of_trust">#f98da5</color>
+    <color name="intro_background">#ffdfb68a</color>
+    <color name="intro2_background">#018e9f</color>
+    <color name="intro3_background">#5C6BC0</color>
+    <color name="intro4_background">#4CAF50</color>
+    <color name="intro_text_color">#ffffff</color>
+    <color name="fragment_safety_resource_text_color">#fff</color>
+    <color name="activity_trustee_background">#f98da5</color>
+    <color name="activity_trustee_text_color">#fffaf3f1</color>
+    <color name="activity_trustee_edittext_color">#05D197</color>
+    <color name="photo_border">#FFFFFF</color>
+    <color name="text_color_link">#024002</color>
+    <color name="main_yellow">#d1395c</color>
+    <color name="dark_yellow">#d1395c</color>
+
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+
+
 </resources>
 

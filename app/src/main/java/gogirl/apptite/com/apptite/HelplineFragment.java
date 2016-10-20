@@ -32,7 +32,7 @@ public class HelplineFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                makeCall("tel:8885693793");//replace with 100
+                makeCall("tel:100");//replace with 100
             }
         });
 
@@ -41,7 +41,7 @@ public class HelplineFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                makeCall("tel:8885693793");//replace with 1091
+                makeCall("tel:1091");//replace with 1091
             }
         });
         bt_helpline3 = (Button) rootView.findViewById(R.id.helpline3);
@@ -49,7 +49,7 @@ public class HelplineFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                makeCall("tel:8885693793");//replace with 011123219750
+                makeCall("tel:011123219750");//replace with 011123219750
             }
         });
         bt_helpline4 = (Button) rootView.findViewById(R.id.helpline4);
@@ -57,7 +57,7 @@ public class HelplineFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                makeCall("tel:8885693793");//replace with 1096
+                makeCall("tel:1096");//replace with 1096
             }
         });
         bt_helpline5 = (Button) rootView.findViewById(R.id.helpline5);
@@ -65,7 +65,7 @@ public class HelplineFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                makeCall("tel:8885693793");//replace with 102
+                makeCall("tel:102");//replace with 102
             }
         });
         bt_helpline6 = (Button) rootView.findViewById(R.id.helpline6);
@@ -73,7 +73,7 @@ public class HelplineFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                makeCall("tel:8885693793");//replace with 112
+                makeCall("tel:112");//replace with 112
             }
         });
         return rootView;

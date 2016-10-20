@@ -3,6 +3,8 @@ package gogirl.apptite.com.apptite;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +17,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.sendgrid.SendGrid;
 
 import gogirl.apptite.com.apptite.Connectivity.InternetConnectivity;
 
@@ -32,6 +36,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -40,16 +45,21 @@ public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail;
     private TextInputLayout inputLayoutEmail;
     private Button btnLogin;
+    private PrefManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
+        prefManager = new PrefManager(this);
+        if (!prefManager.isFirstTimeLaunch()) {
+            launchHomeScreen();
+            finish();
+        }
 
-        //inputLayoutName = (TextInputLayout) findViewById(R.id.input_layout_name);
         inputLayoutEmail = (TextInputLayout) findViewById(R.id.input_layout_email);
 
-        //inputName = (EditText) findViewById(R.id.input_name);
+
         inputEmail = (EditText) findViewById(R.id.input_email);
 
         findViewById(R.id.btn_signup).setOnClickListener(new View.OnClickListener() {
@@ -60,31 +70,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-
-        //inputName.addTextChangedListener(new MyTextWatcher(inputName));
-        inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
-
         findViewById(R.id.btn_Login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitForm();
-                /*if(echo_data.equals("101")||echo_data.equals("102")||echo_data.equals("103"))
-                {
-                    //error
-                }
-                else
-                {
-                    //Intent in = new Intent(MainActivity.this,DashboardFragment.class);
-                    //startActivity(in);
-                }*/
-
-
+                if (validateEmail())
+                    submitForm();
             }
         });
     }
 
-    /*ka
+    /*
      * Sending data to server
      */
     private void sendDataToServer(EditText email)
@@ -130,7 +125,49 @@ public class LoginActivity extends AppCompatActivity {
 
                     Log.v("Error Code ######",echo_data);
 
-
+                    switch (echo_data.split(",")[0])
+                    {
+                        case "101":
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this, "No DB conn", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case "102":
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this, "No Parameters", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case "103":
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this, "No such User! Please SignUp!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case "104":
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this,"Success!",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            startActivity(new Intent(LoginActivity.this,OTPActivity.class).putExtra("OTP",sendAndGetOTP(params[0])).putExtra("name",echo_data.split(",")[1]));
+                            break;
+                        case "105":
+                            new Handler((Looper.getMainLooper())).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this,"No such user!Please SignUp!",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -138,6 +175,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 return null;
             }
+
+
 
             private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException
             {
@@ -158,31 +197,69 @@ public class LoginActivity extends AppCompatActivity {
 
                 return result.toString();
             }
+
+            private String sendAndGetOTP(String toAddress)
+            {
+                String mMsgResponse="";
+
+                int otp = 100000 + new Random().nextInt(900000);
+                try
+                {
+                    SendGrid sendgrid = new SendGrid("virtusa_apptite", "sandiv64");
+
+                    SendGrid.Email email = new SendGrid.Email();
+
+                    email.addTo(toAddress);
+                    email.setFrom("virtusa@apptite.com");
+                    email.setSubject("OTP for GoGirl");
+                    email.setText("Thank You for using GoGirl"+"\n\n\n"+"Your unique OTP is :"+"\t"+otp+"\n\n"+"Please DO NOT DELETE this email because this OTP is required for you to login");
+
+                    SendGrid.Response response = sendgrid.send(email);
+                    mMsgResponse = response.getMessage();
+
+                    Log.d("SendAppExample########", mMsgResponse);
+                    if(mMsgResponse.contains("success"))
+                    {
+                        return new Integer(otp).toString();
+                    }
+                    else
+                    {
+                        return "no_otp";
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    return "runtime_error";
+                }
+
+
+                //return mMsgResponse;
+            }
         }
         Sendingdata sd = new Sendingdata();
-        sd.execute(email.getText().toString());
+        sd.execute(email.getText().toString().trim());
     }
 
-    /**
+    /*
      * Validating form
      */
     private void submitForm() {
-        if (!validateEmail()) {
-            return;
-        }
-
         if(new InternetConnectivity().checkConnectivity(LoginActivity.this))
         {
             sendDataToServer(inputEmail);
-            //Toast.makeText(MainActivity.this,"Completed Login",Toast.LENGTH_LONG).show();
         }
         else
         {
             Toast.makeText(LoginActivity.this,"Cant connect to internet",Toast.LENGTH_LONG).show();
         }
-        //Toast.makeText(getApplicationContext(), "Thank You!", Toast.LENGTH_SHORT).show();
     }
 
+    private void launchHomeScreen() {
+        prefManager.setFirstTimeLaunch(false);
+        startActivity(new Intent(LoginActivity.this, Menu.class));
+        finish();
+    }
 
 
     private boolean validateEmail() {
@@ -192,7 +269,9 @@ public class LoginActivity extends AppCompatActivity {
             inputLayoutEmail.setError(getString(R.string.err_msg_email));
             requestFocus(inputEmail);
             return false;
-        } else {
+        }
+        else
+        {
             inputLayoutEmail.setErrorEnabled(false);
         }
 
@@ -206,29 +285,6 @@ public class LoginActivity extends AppCompatActivity {
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
-    }
-
-    private class MyTextWatcher implements TextWatcher {
-
-        private View view;
-
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.input_email:
-                    validateEmail();
-                    break;
-            }
         }
     }
 }
